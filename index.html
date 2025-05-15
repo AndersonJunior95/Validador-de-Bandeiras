@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Validador de Bandeiras de Cartão</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f7f7f7; }
+        .container { max-width: 400px; margin: auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 8px #0001; }
+        h1 { font-size: 1.5em; margin-bottom: 16px; }
+        label { display: block; margin-bottom: 8px; }
+        input[type="text"] { width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; }
+        .result { font-weight: bold; margin-top: 12px; }
+        .desc { font-size: 0.95em; color: #555; margin-bottom: 24px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Validador de Bandeiras de Cartão</h1>
+        <div class="desc">
+            Este projeto tem como objetivo desenvolver uma aplicação simples capaz de identificar a bandeira de um cartão de crédito (como Visa, MasterCard, Amex, etc.) com base no número do cartão.<br>
+            Utilizando o GitHub Copilot como assistente de codificação, exploramos como a inteligência artificial pode acelerar o desenvolvimento, sugerir trechos de código e melhorar a produtividade.<br>
+            O projeto foca em lógica de validação com expressões regulares e boas práticas de programação.
+        </div>
+        <form id="cardForm" autocomplete="off">
+            <label for="cardNumber">Número do cartão:</label>
+            <input type="text" id="cardNumber" maxlength="19" placeholder="Digite o número do cartão" required>
+            <button type="submit">Identificar Bandeira</button>
+        </form>
+        <div class="result" id="result"></div>
+    </div>
+    <script>
+        function getCardBrand(number) {
+            number = number.replace(/\D/g, '');
+            const patterns = [
+                { name: 'Visa', regex: /^4[0-9]{12}(?:[0-9]{3})?$/ },
+                { name: 'MasterCard', regex: /^(5[1-5][0-9]{14}|2(2[2-9][0-9]{12}|[3-6][0-9]{13}|7[01][0-9]{12}|720[0-9]{12}))$/ },
+                { name: 'American Express', regex: /^3[47][0-9]{13}$/ },
+                { name: 'Diners Club', regex: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/ },
+                { name: 'Discover', regex: /^6(?:011|5[0-9]{2})[0-9]{12}$/ },
+                { name: 'Elo', regex: /^(4011(78|79)|431274|438935|451416|457393|504175|5067[0-6][0-9]|5090[0-9]{2}|627780|636297|636368|650[4-9][0-9]{2}|6516[5-9][0-9]|6550[0-9]{2})[0-9]{10,12}$/ },
+                { name: 'Hipercard', regex: /^(606282|3841)[0-9]{10,12}$/ }
+            ];
+            for (const pattern of patterns) {
+                if (pattern.regex.test(number)) {
+                    return pattern.name;
+                }
+            }
+            return 'Bandeira não identificada';
+        }
+
+        document.getElementById('cardForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const number = document.getElementById('cardNumber').value;
+            const brand = getCardBrand(number);
+            document.getElementById('result').textContent = `Bandeira: ${brand}`;
+        });
+    </script>
+</body>
+</html>
